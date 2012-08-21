@@ -6,7 +6,10 @@ class window.Plot
 		@zombie = new Zombie(@canvas, @context, {start : @start })
 		@interval = @zombie.go(@end - @zombie.x)
 		$(@canvas).bind('stand', () =>
-			@interval = @zombie.go(@end - @zombie.x)
+			if @zombie.x == @end
+				@gameover()
+			else
+				@interval = @zombie.go(@end - @zombie.x)
 		)
 
 	success: () =>
@@ -21,3 +24,9 @@ class window.Plot
 		temp = @end - @zombie.x + @penalty
 		penalty = if temp > 0 then @penalty else @end - @zombie.x 
 		@interval = @zombie.run(penalty)
+
+	win: () =>
+		alert 'WIN!'
+
+	gameover: () =>
+		alert 'GAME OVER!'
