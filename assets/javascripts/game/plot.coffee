@@ -16,12 +16,11 @@ class window.Plot
 		clearInterval(@interval)
 		temp = @zombie.x - (@start + @bonus)
 		bonus = if temp > 0 then @bonus else @zombie.x - @start
-		console.log bonus
 		@interval = @zombie.go(-bonus)
 
 	fail: () =>
 		clearInterval(@interval)
-		temp = @end - @zombie.x + @penalty
+		temp = @end - (@zombie.x + @penalty)
 		penalty = if temp > 0 then @penalty else @end - @zombie.x 
 		@interval = @zombie.run(penalty)
 
