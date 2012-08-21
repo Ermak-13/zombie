@@ -2,17 +2,22 @@ class window.Plot
 	constructor: (@canvas, options = {}) ->
 		@context = @canvas.getContext('2d')
 		[ @start, @end ] = [ 100, 700 ]
-		[ @bonus, @penalty ] = [ 100, 20 ]
-		@zombie = new Zombie(@canvas, @context, {speed : 10, start : @start })
+		[ @bonus, @penalty ] = [ 100, 100 ]
+		@zombie = new Zombie(@canvas, @context, {start : @start })
 		@interval = @zombie.go(@end - @zombie.x)
-
-	success: () =>
-		clearInterval(@interval)
-		temp = @zombie.x - @start + @success
-		step = if temp > 0 then @success else @zombie.x - @start
-		@interval = @zombie.go(-step)
 		$(@canvas).bind('stand', () =>
 			@interval = @zombie.go(@end - @zombie.x)
 		)
 
+	success: () =>
+		clearInterval(@interval)
+		temp = @zombie.x - (@start + @bonus)
+		bonus = if temp > 0 then @bonus else @zombie.x - @start
+		console.log bonus
+		@interval = @zombie.go(-bonus)
+
 	fail: () =>
+		clearInterval(@interval)
+		temp = @end - @zombie.x + @penalty
+		penalty = if temp > 0 then @penalty else @end - @zombie.x 
+		@interval = @zombie.run(penalty)

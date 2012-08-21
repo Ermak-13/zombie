@@ -1,7 +1,7 @@
 class window.Zombie
 	constructor: (@canvas, @context, options = {}) ->
 		@start = (options['start'] || 0)
-		@fast = options['speed'] || 100
+		@speed = options['speed'] || 100
 
 		@zombie = new Image()
 		@zombie.src = 'assets/00.png'
@@ -22,6 +22,21 @@ class window.Zombie
 				clearInterval(interval)
 				$(@canvas).trigger('stand')
 		, @speed)
+		interval
+
+	run: (x) =>
+		$(@canvas).trigger('run')
+		interval = setInterval(() =>
+			if x > 0 
+				@step(@x + 1, @y)
+				x = x - 1
+			else if x < 0
+				@step(@x - 1, @y)
+				x = x + 1
+			else
+				clearInterval(interval)
+				$(@canvas).trigger('stand')
+		, @speed / 3)
 		interval
 
 	step: (x, y) =>
