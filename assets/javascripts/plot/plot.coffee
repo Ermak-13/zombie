@@ -1,11 +1,23 @@
 class window.Plot
 	constructor: (@canvas, options = {}) ->
+		# private methods
+		@init = (options) =>
+			@start = options['start'] || 100
+			@end = options['end'] || 700
+			@bonus = options['bonus'] || 100
+			@penalty = options['penalty'] || 100
+
+		@name = () => 'plot'
+
+		@trigger = (event) =>
+			$(@canvas).trigger "#{@name()}-#{event}"
+
+		# initialize
 		@context = @canvas.getContext('2d')
-		[ @start, @end ] = [ 100, 700 ]
-		[ @bonus, @penalty ] = [ 100, 100 ]
-		@zombie = new Zombie(@canvas, @context, {start : @start })
+		@init(options)
+		@zombie = new Zombie(@context, {start : @start })
 		@interval = @zombie.go(@end - @zombie.x)
-		$(@canvas).bind('stand', () =>
+		$(@canvas).bind('zombie-stand', () =>
 			if @zombie.x == @end
 				@gameover()
 			else
@@ -25,7 +37,9 @@ class window.Plot
 		@interval = @zombie.run(penalty)
 
 	win: () =>
+		@trigger('win')
 		alert 'WIN!'
 
 	gameover: () =>
+		@trigger('gameover')
 		alert 'GAME OVER!'

@@ -1,5 +1,5 @@
 #= require_tree ./libs
-#= require_tree ./game
+#= require_tree ./plot
 
 jQuery ->
 	canvas = document.getElementById('game-plot')
